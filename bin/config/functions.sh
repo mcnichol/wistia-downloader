@@ -15,3 +15,11 @@ msgWithColor(){
 program_is_installed(){
    type $1 &>/dev/null
 }
+
+strip_quotes_from_files(){
+   FILES=$1
+
+   for f in $FILES; do
+      mv "$f"  "./$(echo "$f" | sed 's/\"//g')"
+   done
+}

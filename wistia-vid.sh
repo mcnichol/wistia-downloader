@@ -17,6 +17,7 @@ VIDEO_URL=$(echo $JSON_RESPONSE | jq -r '.assets[0].url')
 if [ ! -d "$SCRIPT_DIR/videos" ]; then
    echo "Creating Directory for Videos"
    mkdir videos
+   echo '{"videos": []}' > "$SCRIPT_DIR/videos/history.json"
 fi
 
 echo "Downloading File $VIDEO_NAME"

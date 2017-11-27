@@ -5,7 +5,28 @@ set -e
 SCRIPT_DIR=${BASH_SOURCE%/*}
 WISTIA_BASE_URL="https://fast.wistia.net/embed/iframe/"
 
-#VIDEO_ID=$(curl -s https://javaspecialists.teachable.com/courses/214654/lectures/3684467 | grep -oe "data-wistia-id=\'[0-9a-zA-Z]*\'" | awk -F "'" '{print $2}')
+source $SCRIPT_DIR/bin/config/functions.sh
+source $SCRIPT_DIR/bin/config/styles.sh
+
+set +e
+program_is_installed jq
+exit_status=$?
+set -e
+
+if [ "$exit_status" -eq "1" ]; then
+   msg "'JQ' must be installed to use this application"
+   msgWithColor "(https://stedolan.github.io/jq/)\n" ${BLUE}
+
+   msg "Install with Homebrew: "
+   msgWithColor "brew install jq\n" ${GREEN}
+   exit -1;
+fi
+
+if [ -z "$1" ]; then
+   msgWithColor 'You must enter a Video ID to be dowloaded.\n' $RED
+   exit -1;
+fi
+
 VIDEO_ID=$1
 VIDEO_URL="$WISTIA_BASE_URL/$VIDEO_ID"
 
@@ -14,6 +35,7 @@ echo "JSON RESPONSE PARSED"
 
 VIDEO_NAME=$(echo $JSON_RESPONSE | jq -r '.name')
 VIDEO_URL=$(echo $JSON_RESPONSE | jq -r '.assets[0].url')
+
 if [ ! -d "$SCRIPT_DIR/videos" ]; then
    echo "Creating Directory for Videos"
    mkdir videos

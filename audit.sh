@@ -7,10 +7,10 @@ function audit_generate_history_file(){
 }
 
 function audit_create_record(){
-   VIDEO_URL=${1}
-   VIDEO_NAME=${2}
-   VIDEO_ID=${3}
-   SCRIPT_DIR=${4}
+   VIDEO_URL="$1"
+   VIDEO_NAME="$2"
+   VIDEO_ID="$3"
+   SCRIPT_DIR="$4"
 
    msgWithColor "Saving record to history\n" ${GREEN}
    msgWithColor "ID:\t${VIDEO_ID}\n" ${GREEN}
@@ -19,7 +19,7 @@ function audit_create_record(){
 
    record_as_json="{\"${VIDEO_ID}\":{\"file-name\":\"${VIDEO_NAME}\",\"url\":\"${VIDEO_URL}\"}}"
 
-   cat "${SCRIPT_DIR}/videos/history.json" | jq --argjson r ${record_as_json} '. += $r' > "${SCRIPT_DIR}/videos/tmp.json"
+   cat "${SCRIPT_DIR}/videos/history.json" | jq --argjson r "${record_as_json}" '. += $r' > "${SCRIPT_DIR}/videos/tmp.json"
 
    mv "${SCRIPT_DIR}/videos/tmp.json" "${SCRIPT_DIR}/videos/history.json"
 
